@@ -14,6 +14,8 @@ def phi(s, a):
 
 def lsvi_ucb_restart(S, A, M, H, variation):
     episode_rewards = np.zeros(M)
+    regrets = np.zeros(M)
+    optimal_reward_per_episode = H
     D = variation
     K = M // D
     histS = [[0 for h in range(H)] for m in range(M)]
@@ -55,7 +57,8 @@ def lsvi_ucb_restart(S, A, M, H, variation):
                 histA[k][h] = int(action)
                 histR[k][h] = reward
                 state = next_state
+            regrets[d * K + i_episode] = optimal_reward_per_episode - episode_rewards[d * K + i_episode]
 
-    return episode_rewards
+    return episode_rewards, regrets
 
 

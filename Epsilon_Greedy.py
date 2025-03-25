@@ -21,6 +21,8 @@ def q_learning_epsilon_greedy(S, A, M, H, variation, epsilon=0.05):
     D = variation
     K = M // D
     episode_rewards = np.zeros(M)
+    regrets = np.zeros(M)
+    optimal_reward_per_episode = H
     for d in range(D):
         Q = np.zeros((S, A))
         policy = np.ones(S)
@@ -42,7 +44,11 @@ def q_learning_epsilon_greedy(S, A, M, H, variation, epsilon=0.05):
                 td_delta = td_target - Q[state][action]
                 Q[state][action] += alpha * td_delta
                 state = next_state
+            regrets[d * K + i_episode] = optimal_reward_per_episode - episode_rewards[d * K + i_episode]
+
+
             V[i_episode,:] = Q.max(axis=1)
             policy = Q.argmax(axis=1)
-    return episode_rewards
+            
+    return episode_rewards, regrets
 

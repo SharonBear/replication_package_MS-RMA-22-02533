@@ -13,6 +13,8 @@ def restartq_ucb_no_restart(S, A, M, H, variation):
     for i in range(1, len(L)):
         L[i] += L[i - 1]
     episode_rewards = np.zeros(M)
+    regrets = np.zeros(M)
+    optimal_reward_per_episode = H  # 假設每步都得 1 分是最理想情況
     D = 1
     K = M // D
     for d in range(D):
@@ -50,6 +52,8 @@ def restartq_ucb_no_restart(S, A, M, H, variation):
                     r_check[h][state][action] = 0.0
                     v_check[h][state][action] = 0.0
                 state = next_state
+            # 加入 regret 計算
+            regrets[d * K + i_episode] = optimal_reward_per_episode - episode_rewards[d * K + i_episode]
 
-    return episode_rewards
+    return episode_rewards, regrets
 

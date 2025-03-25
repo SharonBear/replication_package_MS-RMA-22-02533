@@ -20,7 +20,7 @@ def smooth(y, sm=1):
 A = 2
 H = 5
 S = 2 * H
-M = 500
+M = 5000
 variation = 50
 
 # 設定演算法
